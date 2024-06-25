@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Car Info</title>
+  </head>
+  <body>
+    <h1>Enter VIN to Get Car Information</h1>
+    <form action="{{ url_for('get_car_info') }}" method="post">
+      <label for="vin">VIN:</label>
+      <input type="text" id="vin" name="vin" required />
+      <button type="submit">Get Info</button>
+    </form>
+  </body>
+</html>

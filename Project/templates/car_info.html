@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Car Info</title>
+  </head>
+  <body>
+    <h1>Car Information</h1>
+    {% if car_info %}
+    <p><strong>Year:</strong> {{ car_info.year }}</p>
+    <p><strong>Make:</strong> {{ car_info.make }}</p>
+    <p><strong>Model:</strong> {{ car_info.model }}</p>
+    <p><strong>Trim:</strong> {{ car_info.trim }}</p>
+    <p><strong>Top Speed:</strong> {{ car_info.top_speed }}</p>
+    <p><strong>Cylinders:</strong> {{ car_info.cylinders }}</p>
+    <p><strong>Horsepower:</strong> {{ car_info.horsepower }}</p>
+    <p><strong>Turbo:</strong> {{ car_info.turbo }}</p>
+    <p><strong>Engine Model:</strong> {{ car_info.engine_model }}</p>
+    <p><strong>Fuel Type:</strong> {{ car_info.fuel_type }}</p>
+    <p>
+      <strong>Transmission Style:</strong> {{ car_info.transmission_style }}
+    </p>
+    <p><strong>Drive Type:</strong> {{ car_info.drive_type }}</p>
+    {% else %}
+    <p>No information found for this VIN.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}">Back</a>
+  </body>
+</html>
