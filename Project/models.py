@@ -44,6 +44,65 @@ class CarInfo(db.Model):
     transmission_style = db.Column(db.String)
     drive_type = db.Column(db.String)
 
+
+
+
+def fetch_data(vin):
+    """Get data from API"""
+
+    url = f'https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/{vin}?format=json'
+    response = requests.get(url)
+    data = response.json()
+
+    car_info_data = {}
+    for item in data['Results']:
+        if item['Variable'] == 'Model Year':
+            car_info_data['year'] = int(item['Value']) if item['Value'] else None
+        elif item['Variable'] == 'Make':
+            car_info_data['make'] = item['Value']
+        elif item['Variable'] == 'Model':
+            car_info_data['model'] = item['Value']
+        elif item['Variable'] == 'Trim':
+            car_info_data['trim'] = item['Value']
+        elif item['Variable'] == 'Top Speed':
+            car_info_data['top_speed'] = int(item['Value']) if item['Value'] else None
+        elif item['Variable'] == 'Engine Number of Cylinders':
+            car_info_data['cylinders'] = item['Value']
+        elif item['Variable'] == 'Engine HP':
+            car_info_data['horsepower'] = item['Value']
+        elif item['Variable'] == 'Turbo':
+            car_info_data['turbo'] = item['Value']
+        elif item['Variable'] == 'Engine Model':
+            car_info_data['engine_model'] = item['Value']
+        elif item['Variable'] == 'Fuel Type - Primary':
+            car_info_data['fuel_type'] = item['Value']
+        elif item['Variable'] == 'Transmission Style':
+            car_info_data['transmission_style'] = item['Value']
+        elif item['Variable'] == 'Drive Type':
+            car_info_data['drive_type'] = item['Value']
+
+    car = Car(vin=vin)
+    db.session.add(car)
+    db.session.commit()
+
+    car_info = CarInfo(
+        car_id=car.id,
+        year=car_info_data.get('year'),
+        make=car_info_data.get('make'),
+        model=car_info_data.get('model'),
+        trim=car_info_data.get('trim'),
+        top_speed=car_info_data.get('top_speed'),
+        cylinders=car_info_data.get('cylinders'),
+        horsepower=car_info_data.get('horsepower'),
+        turbo=car_info_data.get('turbo'),
+        engine_model=car_info_data.get('engine_model'),
+        fuel_type=car_info_data.get('fuel_type'),
+        transmission_style=car_info_data.get('transmission_style'),
+        drive_type=car_info_data.get('drive_type')
+    )
+    db.session.add(car_info)
+    db.session.commit()
+
 def connect_db(app):
     db.app = app
     db.init_app(app)
