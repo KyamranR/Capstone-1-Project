@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from models import db, connect_db, User, Car, CarInfo, fetch_data
-import requests
+from form import LoginForm
 
 
 
@@ -25,12 +25,35 @@ def index():
 @app.route('/get-car-info', methods=['POST'])
 def get_car_info():
     vin = request.form['vin'].upper()
+    user_id = session.get('user_id')
+    if user_id:
+        flash("You must be logged in to add a car.", "danger")
+        return redirect(url_for('index'))
+    
     car = Car.query.filter_by(vin=vin).first()
 
     if not car:
-        fetch_data(vin)
+        fetch_data(vin, user_id=1)
         car = Car.query.filter_by(vin=vin).first()
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
-    return render_template('car_info.html', car_info=car_info)
+    return render_template('car_info.html', car_info=car_info, user_id=user_id)
     
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login form for users"""
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        user = User.authenticate(email, password)
+
+        if user:
+            session['email'] = user.email
+            return redirect(url_for('logged_user', email=user.email))
+        else:
+            form.email.errors = ['Invalid email/password.']
+
+    return render_template('login.html', form=form)
