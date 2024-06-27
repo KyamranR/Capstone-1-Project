@@ -1,6 +1,6 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
-
+import requests
 
 
 db = SQLAlchemy()
@@ -47,7 +47,7 @@ class CarInfo(db.Model):
 
 
 
-def fetch_data(vin):
+def fetch_data(vin, user_id):
     """Get data from API"""
 
     url = f'https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/{vin}?format=json'
@@ -81,7 +81,7 @@ def fetch_data(vin):
         elif item['Variable'] == 'Drive Type':
             car_info_data['drive_type'] = item['Value']
 
-    car = Car(vin=vin)
+    car = Car(vin=vin, user_id=user_id)
     db.session.add(car)
     db.session.commit()
 
