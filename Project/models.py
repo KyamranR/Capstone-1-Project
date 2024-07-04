@@ -15,7 +15,25 @@ class User(db.Model):
     profile_pic = db.Column(db.Text)
     password = db.Column(db.String, nullable=False)
 
-    cars = db.relationship('Car', backref='owner')    
+    cars = db.relationship('Car', backref='owner')  
+
+    @classmethod
+    def register(cls, name, email, profile_pic, password):
+        """Register user with hashed password"""
+        hashed = bcrypt.generate_password_hash(password)
+        hashed_utf8 = hashed.decode('utf8')
+        
+        return cls(name=name, email=email, profile_pic=profile_pic, password=hashed_utf8)
+    
+    @classmethod
+    def authenticate(cls, email, password):
+        """Validate that user exists and password is correct"""
+        user = User.query.filter_by(email=email).first()
+
+        if user and bcrypt.check_password_hash(user.password, password):
+            return user
+        else:
+            return False  
 
 class Car(db.Model):
     __tablename__ = 'cars'
