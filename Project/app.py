@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from models import db, connect_db, User, Car, CarInfo, fetch_data
-from form import LoginForm
+from form import LoginForm, RegistrationFrom
 
 
 
@@ -38,6 +38,31 @@ def get_car_info():
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
     return render_template('car_info.html', car_info=car_info, user_id=user_id)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """Register form for users"""
+
+    form = RegistrationFrom()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        profile_pic = form.profile_pic.data
+        password = form.password.data
+
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('User already exists. Please choose different email.', 'error')
+            return redirect('/register')
+
+        new_user = User.register(name, email, profile_pic, password)
+        db.session.add(new_user)
+        db.session.commit()
+        session['email'] = new_user.email
+        return redirect(url_for('index', email=session['email']))
+
+    return render_template('register.html', form=form)
     
 
 @app.route('/login', methods=['GET', 'POST'])
