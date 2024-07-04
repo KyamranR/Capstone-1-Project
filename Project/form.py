@@ -15,6 +15,6 @@ class RegistrationFrom(FlaskForm):
     """User registration form"""
 
     name = StringField('Name:', validators=[InputRequired(), Length(min=1, max=20)])
-    password = PasswordField('Password:', validators=[InputRequired(), Length(min=6, max=50)])
     email = StringField('Email:', validators=[InputRequired(), Length(max=50)])
-    profile_pic = StringField('(Optional) Profile Photo')
+    profile_pic = StringField('Profile Photo')
+    password = PasswordField('Password:', validators=[InputRequired(), Length(min=6, max=50)])
