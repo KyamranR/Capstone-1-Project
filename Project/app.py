@@ -20,10 +20,12 @@ with app.app_context():
 
 @app.route('/')
 def index():
+    """Home page"""
     return render_template('index.html')
     
 @app.route('/get-car-info', methods=['POST'])
 def get_car_info():
+    """Gets car info from API and displays on the page"""
     vin = request.form['vin'].upper()
     user_id = session.get('user_id')
     if user_id:
@@ -86,6 +88,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """Logs out the user"""
     session.pop('email')
     flash('Logged out successfully', 'success')
     return redirect(url_for('index'))
