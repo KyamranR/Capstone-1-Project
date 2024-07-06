@@ -77,8 +77,15 @@ def login():
 
         if user:
             session['email'] = user.email
-            return redirect(url_for('logged_user', email=user.email))
+            flash('Logged In Successfully', 'success')
+            return redirect(url_for('index'))
         else:
             form.email.errors = ['Invalid email/password.']
 
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    session.pop('email')
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('index'))
