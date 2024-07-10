@@ -132,7 +132,22 @@ def update_car_info(vin):
     flash("Car information updated successfully.", "success")
     return redirect(url_for('show_car_info', vin=vin))
 
+@app.route('/remove-car/<int:car_id>', methods=['POST'])
+def remove_car(car_id):
+    """Removes a car from the user's profile"""
+    user_id = session['user_id']
+    car = Car.query.get_or_404(car_id)
 
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash('You are not authorized to delete the car.', 'danger')
+        return redirect(url_for('login'))
+    
+    db.session.delete(car)
+    db.session.commit()
+
+    flash('Car removed successfully!', 'success')
+    return redirect(url_for('user_profile', user_id=user_id))
+    
 
 
 @app.route('/register', methods=['GET', 'POST'])
