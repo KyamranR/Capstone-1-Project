@@ -42,7 +42,7 @@ class Car(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     vin = db.Column(db.String, nullable=False)
 
-    car_info = db.relationship('CarInfo', backref='car')
+    car_info = db.relationship('CarInfo', backref='car', cascade='all, delete-orphan', single_parent=True)
 
 class CarInfo(db.Model):
     __tablename__ = 'car_info'
