@@ -10,6 +10,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="/static/app.css" />
   </head>
   <body>
     <nav class="navbar text-bg-dark p-3">
@@ -21,8 +22,11 @@
         </h1>
       </div>
       <div>
-        {% if session.get('email') %}
-        <a href="#">{{ session.get('email')}}</a> |
+        {% if 'user_id' in session %}
+        <a href="{{ url_for('user_profile', user_id=session['user_id'])}}"
+          >{{ session.get('user_name')}}</a
+        >
+        |
         <a href="{{url_for('logout')}}">Logout</a>
         {% else %}
         <a href="/login">Login</a> |
