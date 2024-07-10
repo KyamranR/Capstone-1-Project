@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import InputRequired, Length, DataRequired, Email
 
 
 class LoginForm(FlaskForm):
@@ -18,3 +18,11 @@ class RegistrationFrom(FlaskForm):
     email = StringField('Email:', validators=[InputRequired(), Length(max=50)])
     profile_pic = StringField('Profile Photo')
     password = PasswordField('Password:', validators=[InputRequired(), Length(min=6, max=50)])
+
+
+class EditUserProfileForm(FlaskForm):
+    """Editing user profile"""
+
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    profile_pic = StringField('Profile Photo')
