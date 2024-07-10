@@ -12,7 +12,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    profile_pic = db.Column(db.Text)
+    profile_pic = db.Column(db.Text, default='/static/lambo.png')
     password = db.Column(db.String, nullable=False)
 
     cars = db.relationship('Car', backref='owner')  
@@ -98,10 +98,12 @@ def fetch_data(vin, user_id):
             car_info_data['transmission_style'] = item['Value']
         elif item['Variable'] == 'Drive Type':
             car_info_data['drive_type'] = item['Value']
+    print(f'Car info data: {car_info_data}')
 
     car = Car(vin=vin, user_id=user_id)
     db.session.add(car)
     db.session.commit()
+    print(f'Car added: {car}')
 
     car_info = CarInfo(
         car_id=car.id,
@@ -120,6 +122,7 @@ def fetch_data(vin, user_id):
     )
     db.session.add(car_info)
     db.session.commit()
+    print(f'Car info added: {car_info}')
 
 def connect_db(app):
     db.app = app
