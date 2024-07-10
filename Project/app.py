@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from models import db, connect_db, User, Car, CarInfo, fetch_data
-from form import LoginForm, RegistrationFrom
+from form import LoginForm, RegistrationFrom, EditUserProfileForm
 
 
 
@@ -29,6 +29,28 @@ def user_profile(user_id):
     user = User.query.get_or_404(user_id)
     cars = Car.query.filter_by(user_id=user.id).all()
     return render_template('user_profile.html', user=user, cars=cars)
+
+@app.route('/user/<int:user_id>/update', methods=['GET', 'POST'])
+def update_user_profile(user_id):
+    """Updating user profile info"""
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash('You are not authorized to update this user info.', 'danger')
+        return redirect(url_for('login'))
+    
+    user = User.query.get_or_404(user_id)
+    form = EditUserProfileForm(obj=user)
+
+    if form.validate_on_submit():
+        user.name = form.name.data
+        user.email = form.email.data
+        user.profile_pic = form.profile_pic.data
+        
+        db.session.commit()
+        flash('User info was updated successfully!', 'success')
+        return redirect(url_for('user_profile', user_id=user.id))
+    
+    return render_template('update_user_profile.html', form=form, user=user)
+
     
 @app.route('/get-car-info/', methods=['GET','POST'])
 def get_car_info():
