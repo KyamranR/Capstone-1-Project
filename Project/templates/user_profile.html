@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block title %}User Profile{% endblock %} {% block
+content %}
+<div class="container">
+  <h1>{{ user.name }}'s Profile</h1>
+  <img src="{{ user.profile_pic }}" alt="Profile Picture" class="profile-pic" />
+  <p>Email: {{ user.email }}</p>
+
+  <h2>Cars Added</h2>
+  <ul>
+    {% for car in cars %}
+    <a href="{{ url_for('show_car_info', vin=car.vin)}}"
+      ><li>{{ car.vin }}</li></a
+    >
+    {% else %}
+    <li>No cars added yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
