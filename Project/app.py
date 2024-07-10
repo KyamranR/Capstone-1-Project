@@ -22,24 +22,95 @@ with app.app_context():
 def index():
     """Home page"""
     return render_template('index.html')
+
+@app.route('/user/<int:user_id>')
+def user_profile(user_id):
+    """Displays user profile and list of cars added"""
+    user = User.query.get_or_404(user_id)
+    cars = Car.query.filter_by(user_id=user.id).all()
+    return render_template('user_profile.html', user=user, cars=cars)
     
-@app.route('/get-car-info', methods=['POST'])
+@app.route('/get-car-info/', methods=['GET','POST'])
 def get_car_info():
     """Gets car info from API and displays on the page"""
     vin = request.form['vin'].upper()
-    user_id = session.get('user_id')
-    if user_id:
-        flash("You must be logged in to add a car.", "danger")
-        return redirect(url_for('index'))
     
     car = Car.query.filter_by(vin=vin).first()
 
     if not car:
-        fetch_data(vin, user_id=1)
-        car = Car.query.filter_by(vin=vin).first()
+        fetch_data(vin)
+        
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
-    return render_template('car_info.html', car_info=car_info, user_id=user_id)
+    return render_template('car_info.html', car_info=car_info)
+
+@app.route('/show-car-info/<vin>')
+def show_car_info(vin):
+    """Displays car info when clicked on VIN"""
+    car = Car.query.filter_by(vin=vin).first()
+    car_info = CarInfo.query.filter_by(car_id=car.id).first()
+
+    return render_template('show_car_info.html', car_info=car_info)
+
+
+@app.route('/user/<int:user_id>/add', methods=['GET', 'POST'])
+def add_car(user_id):
+    """Add car to the user's profile"""
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash('You are not authorized to add a car for this user.', 'danger')
+        return redirect(url_for('login'))
+
+    vin = request.form['vin'].upper()
+    car = Car.query.filter_by(vin=vin, user_id=user_id).first()
+
+    if not car:
+        fetch_data(vin, user_id)
+        flash('Car added successfully!', 'success')
+    else:
+        flash('Car already exists.', 'info')
+    return redirect(url_for('user_profile', user_id=user_id))
+
+@app.route('/update-car-info/<vin>', methods=['POST'])
+def update_car_info(vin):
+    """Update car information for specific fields"""
+    car = Car.query.filter_by(vin=vin).first()
+    if not car:
+        flash("Car not found.", "danger")
+        return redirect(url_for('user_profile', user_id=session['user_id']))
+
+    car_info = CarInfo.query.filter_by(car_id=car.id).first()
+    if not car_info:
+        flash("Car information not found.", "danger")
+        return redirect(url_for('user_profile', user_id=session['user_id']))
+
+    if 'year' in request.form and request.form['year']:
+        car_info.year = request.form['year']
+    if 'make' in request.form and request.form['make']:
+        car_info.make = request.form['make']
+    if 'model' in request.form and request.form['model']:
+        car_info.model = request.form['model']
+    if 'trim' in request.form and request.form['trim']:
+        car_info.trim = request.form['trim']
+    if 'top_speed' in request.form and request.form['top_speed']:
+        car_info.top_speed = request.form['top_speed']
+    if 'cylinders' in request.form and request.form['cylinders']:
+        car_info.cylinders = request.form['cylinders']
+    if 'horsepower' in request.form and request.form['horsepower']:
+        car_info.horsepower = request.form['horsepower']
+    if 'turbo' in request.form and request.form['turbo']:
+        car_info.turbo = request.form['turbo']
+    if 'engine_model' in request.form and request.form['engine_model']:
+        car_info.engine_model = request.form['engine_model']
+    if 'transmission_style' in request.form and request.form['transmission_style']:
+        car_info.transmission_style = request.form['transmission_style']
+    if 'drive_type' in request.form and request.form['drive_type']:
+        car_info.drive_type = request.form['drive_type']
+
+    db.session.commit()
+    flash("Car information updated successfully.", "success")
+    return redirect(url_for('show_car_info', vin=vin))
+
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -61,8 +132,9 @@ def register():
         new_user = User.register(name, email, profile_pic, password)
         db.session.add(new_user)
         db.session.commit()
-        session['email'] = new_user.email
-        return redirect(url_for('index', email=session['email']))
+        session['user_id'] = new_user.id
+        session['user_name'] = new_user.name
+        return redirect(url_for('index', user_id=new_user.id))
 
     return render_template('register.html', form=form)
     
@@ -78,9 +150,10 @@ def login():
         user = User.authenticate(email, password)
 
         if user:
-            session['email'] = user.email
+            session['user_id'] = user.id
+            session['user_name'] = user.name
             flash('Logged In Successfully', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('user_profile', user_id=user.id))
         else:
             form.email.errors = ['Invalid email/password.']
 
@@ -89,6 +162,7 @@ def login():
 @app.route('/logout')
 def logout():
     """Logs out the user"""
-    session.pop('email')
+    session.pop('user_id')
+    session.pop('user_name')
     flash('Logged out successfully', 'success')
     return redirect(url_for('index'))
