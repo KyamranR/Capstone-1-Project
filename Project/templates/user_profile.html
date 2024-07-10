@@ -13,9 +13,17 @@ content %}
   <h2>Cars Added</h2>
   <ul>
     {% for car in cars %}
-    <a href="{{ url_for('show_car_info', vin=car.vin)}}"
-      ><li>{{ car.vin }}</li></a
-    >
+    <li>
+      <a href="{{ url_for('show_car_info', vin=car.vin)}}">{{ car.vin }}</a>
+      <form
+        action="{{ url_for('remove_car', car_id=car.id) }}"
+        method="post"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-danger btn-sm m-1">Delete</button>
+      </form>
+    </li>
+
     {% else %}
     <li>No cars added yet.</li>
     {% endfor %}
