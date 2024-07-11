@@ -26,6 +26,10 @@ def index():
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):
     """Displays user profile and list of cars added"""
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash('You are not authorized to view this user info.', 'danger')
+        return redirect(url_for('index'))
+
     user = User.query.get_or_404(user_id)
     cars = Car.query.filter_by(user_id=user.id).all()
     return render_template('user_profile.html', user=user, cars=cars)
@@ -60,7 +64,13 @@ def get_car_info():
     car = Car.query.filter_by(vin=vin).first()
 
     if not car:
-        fetch_data(vin)
+        car_info = fetch_data(vin)
+
+        if car_info:
+            return render_template('car_info.html', car_info=car_info)
+        else:
+            flash('Car info could not be retrieved.', 'danger')
+            return redirect(url_for('index'))
         
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
@@ -158,7 +168,7 @@ def register():
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
-        profile_pic = form.profile_pic.data
+        profile_pic = form.profile_pic.data or User.profile_pic.default.arg
         password = form.password.data
 
         existing_user = User.query.filter_by(email=email).first()
@@ -193,7 +203,7 @@ def login():
             return redirect(url_for('user_profile', user_id=user.id))
         else:
             form.email.errors = ['Invalid email/password.']
-
+    
     return render_template('login.html', form=form)
 
 @app.route('/logout')
