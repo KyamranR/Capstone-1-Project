@@ -2,6 +2,7 @@
 content %}
 <div class="container m-1">
   <h1>Car Information</h1>
+  <h2>VIN: {{vin}}</h2>
   {% if car_info %}
   <p><strong>Year:</strong> {{ car_info.year }}</p>
   <p><strong>Make:</strong> {{ car_info.make }}</p>
@@ -22,7 +23,7 @@ content %}
     action="{{ url_for('add_car', user_id=session['user_id']) }}"
     method="post"
   >
-    <input type="hidden" name="vin" value="{{ car_info.vin }}" />
+    <input type="hidden" name="vin" value="{{ vin }}" />
     <button type="submit" class="btn btn-primary">Add Car</button>
   </form>
   {% else %}
