@@ -27,6 +27,9 @@ content %}
     <input type="hidden" name="vin" value="{{ vin }}" />
     <button type="submit" class="btn btn-primary">Add Car</button>
   </form>
+  <a href="{{ url_for('update_car_info', vin=vin) }}">
+    <button class="btn btn-outline-warning mt-3">Update Info</button><br />
+  </a>
   {% else %}
   <p>
     <a href="{{ url_for('login') }}">Log in</a> to add this car to your profile.
@@ -34,7 +37,7 @@ content %}
   {% endif %}
 
   <a href="{{ url_for('user_profile', user_id=session['user_id']) }}"
-    ><button class="btn btn-secondary m-1">Back</button></a
+    ><button class="btn btn-secondary mt-2">Back</button></a
   >
 </div>
 {% endblock %}
