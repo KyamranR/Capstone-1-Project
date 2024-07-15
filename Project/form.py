@@ -28,7 +28,7 @@ class EditUserProfileForm(FlaskForm):
     profile_pic = StringField('Profile Photo')
 
 
-class EditCarInfo(FlaskForm):
+class EditCarInfoForm(FlaskForm):
     """Editing car information"""
 
     year = IntegerField('Year', validators=[Optional()])
