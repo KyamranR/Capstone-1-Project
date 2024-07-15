@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from models import db, connect_db, User, Car, CarInfo, fetch_car_data, save_car_data
-from form import LoginForm, RegistrationFrom, EditUserProfileForm
+from form import LoginForm, RegistrationFrom, EditUserProfileForm, EditCarInfoForm
 
 
 
@@ -90,7 +90,7 @@ def show_car_info(vin):
         flash('Car info could not be found.', 'danger')
         return redirect(url_for('index'))
 
-    return render_template('car_info.html', car_info=car_info, vin=vin)
+    return render_template('show_car_info.html', car_info=car_info, vin=vin)
 
 
 @app.route('/user/<int:user_id>/add', methods=['GET', 'POST'])
@@ -119,39 +119,43 @@ def add_car(user_id):
         flash('Car already exists.', 'info')
     return redirect(url_for('user_profile', user_id=user_id))
 
-@app.route('/update-car-info/<vin>', methods=['POST'])
+@app.route('/update-car-info/<vin>', methods=['GET', 'POST'])
 def update_car_info(vin):
     """Update car information for specific fields"""
     car = Car.query.filter_by(vin=vin).first()
     if not car:
         flash("Car not found.", "danger")
-        return redirect(url_for('user_profile', user_id=session['user_id']))
+        return redirect(url_for('user_profile', user_id=session.get('user_id')))
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
     if not car_info:
         flash("Car information not found.", "danger")
-        return redirect(url_for('user_profile', user_id=session.get['user_id']))
+        return redirect(url_for('user_profile', user_id=session.get('user_id')))
 
-    car_info.year = request.form.get('year', car_info.year)
-    car_info.make = request.form.get('make', car_info.make)
-    car_info.model = request.form.get('model', car_info.model)
-    car_info.trim = request.form.get('trim', car_info.trim)
-    car_info.top_speed = request.form.get('top_speed', car_info.top_speed)
-    car_info.cylinders = request.form.get('cylinders', car_info.cylinders)
-    car_info.horsepower = request.form.get('horsepower', car_info.horsepower)
-    car_info.turbo = request.form.get('turbo', car_info.turbo)
-    car_info.engine_model = request.form.get('engine_model', car_info.engine_model)
-    car_info.transmission_style = request.form.get('transmission_style', car_info.transmission_style)
-    car_info.drive_type = request.form.get('drive_type', car_info.drive_type)
+    form = EditCarInfoForm(obj=car_info)
+    if form.validate_on_submit():
+        car_info.year = form.year.data or car_info.year
+        car_info.make = form.make.data or car_info.make
+        car_info.model = form.model.data or car_info.model
+        car_info.trim = form.trim.data or car_info.trim
+        car_info.top_speed = form.top_speed.data or car_info.top_speed
+        car_info.cylinders = form.cylinders.data or car_info.cylinders
+        car_info.horsepower = form.horsepower.data or car_info.horsepower
+        car_info.turbo = form.turbo.data
+        car_info.engine_model = form.engine_model.data or car_info.engine_model
+        car_info.transmission_style = form.transmission_style.data or car_info.transmission_style
+        car_info.drive_type = form.drive_type.data or car_info.drive_type
     
-    try:
-        db.session.commit()
-        flash("Car information updated successfully.", "success")
-    except:
-        db.session.rollback()
-        flash('Error updating car information. Please try again.', 'danger')
+        try:
+            db.session.commit()
+            flash("Car information updated successfully.", "success")
+        except:
+            db.session.rollback()
+            flash('Error updating car information. Please try again.', 'danger')
 
-    return redirect(url_for('show_car_info', vin=vin))
+        return redirect(url_for('show_car_info', vin=vin))
+    
+    return render_template('update_car_info.html', form=form, vin=vin)
 
 @app.route('/remove-car/<int:car_id>', methods=['POST'])
 def remove_car(car_id):
