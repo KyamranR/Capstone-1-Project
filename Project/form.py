@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
-from wtforms.validators import InputRequired, Length, DataRequired, Email
+from wtforms import StringField, PasswordField, TextAreaField, IntegerField, BooleanField, SubmitField
+from wtforms.validators import InputRequired, Length, DataRequired, Email, Optional
 
 
 class LoginForm(FlaskForm):
@@ -26,3 +26,20 @@ class EditUserProfileForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     profile_pic = StringField('Profile Photo')
+
+
+class EditCarInfo(FlaskForm):
+    """Editing car information"""
+
+    year = IntegerField('Year', validators=[Optional()])
+    make = StringField('Make', validators=[Optional()])
+    model = StringField('Model', validators=[Optional()])
+    trim = StringField('Trim', validators=[Optional()])
+    top_speed = IntegerField('Top Speed', validators=[Optional()])
+    cylinders = IntegerField('Cylinders', validators=[Optional()])
+    horsepower = IntegerField('Horsepower', validators=[Optional()])
+    turbo = BooleanField('Turbo')
+    engine_model = StringField('Engine Model', validators=[Optional()])
+    transmission_style = StringField('Transmission Style', validators=[Optional()])
+    drive_type = StringField('Drive Type', validators=[Optional()])
+    submit = SubmitField('Update Info')
