@@ -63,11 +63,8 @@ class CarInfo(db.Model):
     drive_type = db.Column(db.String)
 
 
-
-
-def fetch_data(vin, user_id=None):
-    """Get data from API"""
-
+def fetch_car_data(vin):
+    """Fetch car data from API"""
     url = f'https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/{vin}?format=json'
     response = requests.get(url)
     data = response.json()
@@ -98,32 +95,33 @@ def fetch_data(vin, user_id=None):
             car_info_data['transmission_style'] = item['Value']
         elif item['Variable'] == 'Drive Type':
             car_info_data['drive_type'] = item['Value']
-    
-    if user_id:
-        car = Car(vin=vin, user_id=user_id)
-        db.session.add(car)
-        db.session.commit()
-    
 
-        car_info = CarInfo(
-            car_id=car.id,
-            year=car_info_data.get('year'),
-            make=car_info_data.get('make'),
-            model=car_info_data.get('model'),
-            trim=car_info_data.get('trim'),
-            top_speed=car_info_data.get('top_speed'),
-            cylinders=car_info_data.get('cylinders'),
-            horsepower=car_info_data.get('horsepower'),
-            turbo=car_info_data.get('turbo'),
-            engine_model=car_info_data.get('engine_model'),
-            fuel_type=car_info_data.get('fuel_type'),
-            transmission_style=car_info_data.get('transmission_style'),
-            drive_type=car_info_data.get('drive_type')
-        )
-        db.session.add(car_info)
-        db.session.commit()
-        
     return car_info_data
+
+def save_car_data(vin, user_id, car_info_data):
+    """Save car data to the user's profile"""
+    car = Car(vin=vin, user_id=user_id)
+    db.session.add(car)
+    db.session.commit()
+
+    car_info = CarInfo(
+        car_id=car.id,
+        year=car_info_data.get('year'),
+        make=car_info_data.get('make'),
+        model=car_info_data.get('model'),
+        trim=car_info_data.get('trim'),
+        top_speed=car_info_data.get('top_speed'),
+        cylinders=car_info_data.get('cylinders'),
+        horsepower=car_info_data.get('horsepower'),
+        turbo=car_info_data.get('turbo'),
+        engine_model=car_info_data.get('engine_model'),
+        fuel_type=car_info_data.get('fuel_type'),
+        transmission_style=car_info_data.get('transmission_style'),
+        drive_type=car_info_data.get('drive_type')
+    )
+    db.session.add(car_info)
+    db.session.commit()
+
 
 def connect_db(app):
     db.app = app
