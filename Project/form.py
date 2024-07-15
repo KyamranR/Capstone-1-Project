@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, IntegerField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, TextAreaField, IntegerField, BooleanField, SelectField
 from wtforms.validators import InputRequired, Length, DataRequired, Email, Optional
 
 
@@ -38,8 +38,8 @@ class EditCarInfoForm(FlaskForm):
     top_speed = IntegerField('Top Speed', validators=[Optional()])
     cylinders = IntegerField('Cylinders', validators=[Optional()])
     horsepower = IntegerField('Horsepower', validators=[Optional()])
-    turbo = BooleanField('Turbo')
+    turbo = SelectField('Turbo', choices=[('True', 'True'), ('False', 'False')], validators=[Optional()])
     engine_model = StringField('Engine Model', validators=[Optional()])
     transmission_style = StringField('Transmission Style', validators=[Optional()])
     drive_type = StringField('Drive Type', validators=[Optional()])
-    submit = SubmitField('Update Info')
+    
