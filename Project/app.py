@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
-from models import db, connect_db, User, Car, CarInfo, fetch_data
+from models import db, connect_db, User, Car, CarInfo, fetch_car_data, save_car_data
 from form import LoginForm, RegistrationFrom, EditUserProfileForm
 
 
@@ -56,33 +56,41 @@ def update_user_profile(user_id):
     return render_template('update_user_profile.html', form=form, user=user)
 
     
-@app.route('/get-car-info/', methods=['GET','POST'])
+@app.route('/get-car-info/', methods=['GET', 'POST'])
 def get_car_info():
     """Gets car info from API and displays on the page"""
-    vin = request.form['vin'].upper()
+    vin = request.form.get('vin', '').upper()
+
+    if not vin:
+        flash('VIN is required.', 'danger')
+        return redirect(url_for('index'))
     
     car = Car.query.filter_by(vin=vin).first()
 
     if not car:
-        car_info = fetch_data(vin)
+        car_info = fetch_car_data(vin)
 
         if car_info:
-            return render_template('car_info.html', car_info=car_info)
+            return render_template('car_info.html', car_info=car_info, vin=vin)
         else:
             flash('Car info could not be retrieved.', 'danger')
             return redirect(url_for('index'))
         
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
-    return render_template('car_info.html', car_info=car_info)
+    return render_template('car_info.html', car_info=car_info, vin=vin)
 
-@app.route('/show-car-info/<vin>')
+@app.route('/show-car-info/<vin>', methods=['GET', 'POST'])
 def show_car_info(vin):
     """Displays car info when clicked on VIN"""
     car = Car.query.filter_by(vin=vin).first()
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
 
-    return render_template('show_car_info.html', car_info=car_info)
+    if not car or not car_info:
+        flash('Car info could not be found.', 'danger')
+        return redirect(url_for('index'))
+
+    return render_template('car_info.html', car_info=car_info, vin=vin)
 
 
 @app.route('/user/<int:user_id>/add', methods=['GET', 'POST'])
@@ -92,12 +100,21 @@ def add_car(user_id):
         flash('You are not authorized to add a car for this user.', 'danger')
         return redirect(url_for('login'))
 
-    vin = request.form['vin'].upper()
+    vin = request.form.get('vin', '').upper()
+
+    if not vin:
+        flash('VIN is required.', 'danger')
+        return redirect(url_for('user_profile', user_id=user_id))
+    
     car = Car.query.filter_by(vin=vin, user_id=user_id).first()
 
     if not car:
-        fetch_data(vin, user_id)
-        flash('Car added successfully!', 'success')
+        car_info = fetch_car_data(vin)
+        if car_info:
+            save_car_data(vin, user_id, car_info)
+            flash('Car added successfully!', 'success')
+        else:
+            flash('Car info could not be retrieved.', 'danger')
     else:
         flash('Car already exists.', 'info')
     return redirect(url_for('user_profile', user_id=user_id))
@@ -113,33 +130,27 @@ def update_car_info(vin):
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
     if not car_info:
         flash("Car information not found.", "danger")
-        return redirect(url_for('user_profile', user_id=session['user_id']))
+        return redirect(url_for('user_profile', user_id=session.get['user_id']))
 
-    if 'year' in request.form and request.form['year']:
-        car_info.year = request.form['year']
-    if 'make' in request.form and request.form['make']:
-        car_info.make = request.form['make']
-    if 'model' in request.form and request.form['model']:
-        car_info.model = request.form['model']
-    if 'trim' in request.form and request.form['trim']:
-        car_info.trim = request.form['trim']
-    if 'top_speed' in request.form and request.form['top_speed']:
-        car_info.top_speed = request.form['top_speed']
-    if 'cylinders' in request.form and request.form['cylinders']:
-        car_info.cylinders = request.form['cylinders']
-    if 'horsepower' in request.form and request.form['horsepower']:
-        car_info.horsepower = request.form['horsepower']
-    if 'turbo' in request.form and request.form['turbo']:
-        car_info.turbo = request.form['turbo']
-    if 'engine_model' in request.form and request.form['engine_model']:
-        car_info.engine_model = request.form['engine_model']
-    if 'transmission_style' in request.form and request.form['transmission_style']:
-        car_info.transmission_style = request.form['transmission_style']
-    if 'drive_type' in request.form and request.form['drive_type']:
-        car_info.drive_type = request.form['drive_type']
+    car_info.year = request.form.get('year', car_info.year)
+    car_info.make = request.form.get('make', car_info.make)
+    car_info.model = request.form.get('model', car_info.model)
+    car_info.trim = request.form.get('trim', car_info.trim)
+    car_info.top_speed = request.form.get('top_speed', car_info.top_speed)
+    car_info.cylinders = request.form.get('cylinders', car_info.cylinders)
+    car_info.horsepower = request.form.get('horsepower', car_info.horsepower)
+    car_info.turbo = request.form.get('turbo', car_info.turbo)
+    car_info.engine_model = request.form.get('engine_model', car_info.engine_model)
+    car_info.transmission_style = request.form.get('transmission_style', car_info.transmission_style)
+    car_info.drive_type = request.form.get('drive_type', car_info.drive_type)
+    
+    try:
+        db.session.commit()
+        flash("Car information updated successfully.", "success")
+    except:
+        db.session.rollback()
+        flash('Error updating car information. Please try again.', 'danger')
 
-    db.session.commit()
-    flash("Car information updated successfully.", "success")
     return redirect(url_for('show_car_info', vin=vin))
 
 @app.route('/remove-car/<int:car_id>', methods=['POST'])
@@ -152,10 +163,15 @@ def remove_car(car_id):
         flash('You are not authorized to delete the car.', 'danger')
         return redirect(url_for('login'))
     
-    db.session.delete(car)
-    db.session.commit()
+    try:
+    
+        db.session.delete(car)
+        db.session.commit()
+        flash('Car removed successfully!', 'success')
 
-    flash('Car removed successfully!', 'success')
+    except:
+        db.session.rollback()
+        flash('Error removing car. Please try again.', 'danger')
     return redirect(url_for('user_profile', user_id=user_id))
     
 
@@ -177,10 +193,17 @@ def register():
             return redirect('/register')
 
         new_user = User.register(name, email, profile_pic, password)
-        db.session.add(new_user)
-        db.session.commit()
-        session['user_id'] = new_user.id
-        session['user_name'] = new_user.name
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            session['user_id'] = new_user.id
+            session['user_name'] = new_user.name
+            flash('Registered successfully!', 'success')
+        except:
+            db.session.rollback()
+            flash('Error registering user. Please try again.', 'dager')
+
         return redirect(url_for('index', user_id=new_user.id))
 
     return render_template('register.html', form=form)
@@ -213,3 +236,6 @@ def logout():
     session.pop('user_name')
     flash('Logged out successfully', 'success')
     return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
