@@ -130,15 +130,20 @@ def add_car(user_id):
 @app.route('/update-car-info/<vin>', methods=['GET', 'POST'])
 def update_car_info(vin):
     """Update car information for specific fields"""
-    car = Car.query.filter_by(vin=vin).first()
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('User not logged in.', 'danger')
+        return redirect(url_for('login'))
+    
+    car = Car.query.filter_by(vin=vin, user_id=user_id).first()
     if not car:
         flash("Car not found.", "danger")
-        return redirect(url_for('user_profile', user_id=session.get('user_id')))
+        return redirect(url_for('user_profile', user_id=user_id))
 
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
     if not car_info:
         flash("Car information not found.", "danger")
-        return redirect(url_for('user_profile', user_id=session.get('user_id')))
+        return redirect(url_for('user_profile', user_id=user_id))
 
     form = EditCarInfoForm(obj=car_info)
     if form.validate_on_submit():
