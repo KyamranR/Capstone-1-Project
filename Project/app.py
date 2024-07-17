@@ -83,12 +83,20 @@ def get_car_info():
 @app.route('/show-car-info/<vin>', methods=['GET', 'POST'])
 def show_car_info(vin):
     """Displays car info when clicked on VIN"""
-    car = Car.query.filter_by(vin=vin).first()
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('User not logged in.', 'danger')
+        return redirect(url_for('login'))
+    
+    car = Car.query.filter_by(vin=vin, user_id=user_id).first()
+    if not car:
+        flash('Car not found.', 'danger')
+        return redirect(url_for('user_profile', user_id=user_id))
+    
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
-
-    if not car or not car_info:
+    if not car_info:
         flash('Car info could not be found.', 'danger')
-        return redirect(url_for('index'))
+        return redirect(url_for('user_profile', user_id=user_id))
 
     return render_template('show_car_info.html', car_info=car_info, vin=vin)
 
