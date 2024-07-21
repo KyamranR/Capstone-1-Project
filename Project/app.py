@@ -23,6 +23,66 @@ def index():
     """Home page"""
     return render_template('index.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """Register form for users"""
+
+    form = RegistrationFrom()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        profile_pic = form.profile_pic.data or User.profile_pic.default.arg
+        password = form.password.data
+
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('User already exists. Please choose different email.', 'error')
+            return redirect('/register')
+
+        new_user = User.register(name, email, profile_pic, password)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            session['user_id'] = new_user.id
+            session['user_name'] = new_user.name
+            flash('Registered successfully!', 'success')
+        except:
+            db.session.rollback()
+            flash('Error registering user. Please try again.', 'dager')
+
+        return redirect(url_for('index', user_id=new_user.id))
+
+    return render_template('register.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login form for users"""
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        user = User.authenticate(email, password)
+
+        if user:
+            session['user_id'] = user.id
+            session['user_name'] = user.name
+            flash('Logged In Successfully', 'success')
+            return redirect(url_for('user_profile', user_id=user.id))
+        else:
+            form.email.errors = ['Invalid email/password.']
+    
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    """Logs out the user"""
+    session.pop('user_id')
+    session.pop('user_name')
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('index'))
+
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):
     """Displays user profile and list of cars added"""
@@ -80,6 +140,7 @@ def get_car_info():
     car_info = CarInfo.query.filter_by(car_id=car.id).first()
     return render_template('car_info.html', car_info=car_info, vin=vin)
 
+
 @app.route('/show-car-info/<vin>', methods=['GET', 'POST'])
 def show_car_info(vin):
     """Displays car info when clicked on VIN"""
@@ -100,32 +161,6 @@ def show_car_info(vin):
 
     return render_template('show_car_info.html', car_info=car_info, vin=vin)
 
-
-@app.route('/user/<int:user_id>/add', methods=['GET', 'POST'])
-def add_car(user_id):
-    """Add car to the user's profile"""
-    if 'user_id' not in session or session['user_id'] != user_id:
-        flash('You are not authorized to add a car for this user.', 'danger')
-        return redirect(url_for('login'))
-
-    vin = request.form.get('vin', '').upper()
-
-    if not vin:
-        flash('VIN is required.', 'danger')
-        return redirect(url_for('user_profile', user_id=user_id))
-    
-    car = Car.query.filter_by(vin=vin, user_id=user_id).first()
-
-    if not car:
-        car_info = fetch_car_data(vin)
-        if car_info:
-            save_car_data(vin, user_id, car_info)
-            flash('Car added successfully!', 'success')
-        else:
-            flash('Car info could not be retrieved.', 'danger')
-    else:
-        flash('Car already exists.', 'info')
-    return redirect(url_for('user_profile', user_id=user_id))
 
 @app.route('/update-car-info/<vin>', methods=['GET', 'POST'])
 def update_car_info(vin):
@@ -193,66 +228,7 @@ def remove_car(car_id):
     
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    """Register form for users"""
 
-    form = RegistrationFrom()
-    if form.validate_on_submit():
-        name = form.name.data
-        email = form.email.data
-        profile_pic = form.profile_pic.data or User.profile_pic.default.arg
-        password = form.password.data
-
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash('User already exists. Please choose different email.', 'error')
-            return redirect('/register')
-
-        new_user = User.register(name, email, profile_pic, password)
-
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            session['user_id'] = new_user.id
-            session['user_name'] = new_user.name
-            flash('Registered successfully!', 'success')
-        except:
-            db.session.rollback()
-            flash('Error registering user. Please try again.', 'dager')
-
-        return redirect(url_for('index', user_id=new_user.id))
-
-    return render_template('register.html', form=form)
-    
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    """Login form for users"""
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-
-        user = User.authenticate(email, password)
-
-        if user:
-            session['user_id'] = user.id
-            session['user_name'] = user.name
-            flash('Logged In Successfully', 'success')
-            return redirect(url_for('user_profile', user_id=user.id))
-        else:
-            form.email.errors = ['Invalid email/password.']
-    
-    return render_template('login.html', form=form)
-
-@app.route('/logout')
-def logout():
-    """Logs out the user"""
-    session.pop('user_id')
-    session.pop('user_name')
-    flash('Logged out successfully', 'success')
-    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
