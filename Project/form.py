@@ -1,23 +1,23 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, IntegerField, BooleanField, SelectField
-from wtforms.validators import InputRequired, Length, DataRequired, Email, Optional
+from wtforms import StringField, PasswordField, IntegerField, SelectField
+from wtforms.validators import DataRequired, Length, Email, Optional
 
 
 class LoginForm(FlaskForm):
     """User login form"""
 
-    email = StringField('Email:', validators=[InputRequired()])
-    password = PasswordField('Password:', validators=[InputRequired()])
+    email = StringField('Email:', validators=[DataRequired()])
+    password = PasswordField('Password:', validators=[DataRequired()])
 
 
 
-class RegistrationFrom(FlaskForm):
+class RegistrationForm(FlaskForm):
     """User registration form"""
 
-    name = StringField('Name:', validators=[InputRequired(), Length(min=1, max=20)])
-    email = StringField('Email:', validators=[InputRequired(), Length(max=50)])
+    name = StringField('Name:', validators=[DataRequired(), Length(min=1, max=20)])
+    email = StringField('Email:', validators=[DataRequired(), Length(max=50)])
     profile_pic = StringField('Profile Photo')
-    password = PasswordField('Password:', validators=[InputRequired(), Length(min=6, max=50)])
+    password = PasswordField('Password:', validators=[DataRequired(), Length(min=6, max=50)])
 
 
 class EditUserProfileForm(FlaskForm):
