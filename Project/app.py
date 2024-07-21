@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from models import db, connect_db, User, Car, CarInfo, fetch_car_data, save_car_data
-from form import LoginForm, RegistrationFrom, EditUserProfileForm, EditCarInfoForm
+from form import LoginForm, RegistrationForm, EditUserProfileForm, EditCarInfoForm
 
 
 
@@ -27,7 +27,7 @@ def index():
 def register():
     """Register form for users"""
 
-    form = RegistrationFrom()
+    form = RegistrationForm()
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
