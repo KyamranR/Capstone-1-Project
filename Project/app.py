@@ -205,6 +205,30 @@ def update_car_info(vin):
     
     return render_template('update_car_info.html', form=form, vin=vin)
 
+@app.route('/user/<int:user_id>/add', methods=['POST'])
+def add_car(user_id):
+    if 'user_id' not in session or session['user_id'] != user_id:
+        flash('You are not authorized to add a car for this user.', 'danger')
+        return redirect(url_for('login'))
+
+    vin = request.form.get('vin', '').upper()
+    if not vin:
+        flash('VIN is required.', 'danger')
+        return redirect(url_for('user_profile', user_id=user_id))
+
+    car = Car.query.filter_by(vin=vin, user_id=user_id).first()
+    if not car:
+        car_info = fetch_car_data(vin)
+        if car_info:
+            save_car_data(vin, user_id, car_info)
+            flash('Car added successfully!', 'success')
+        else:
+            flash('Car info could not be retrieved.', 'danger')
+    else:
+        flash('Car already exists.', 'info')
+
+    return redirect(url_for('user_profile', user_id=user_id))
+
 @app.route('/remove-car/<int:car_id>', methods=['POST'])
 def remove_car(car_id):
     """Removes a car from the user's profile"""
