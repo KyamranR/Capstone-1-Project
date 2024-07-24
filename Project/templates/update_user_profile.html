@@ -1,25 +1,26 @@
 {% extends "base.html" %} {% block title %}Update Profile{% endblock %} {% block
 content %}
-<div class="container">
-  <h1>Update Profile</h1>
-  <form
-    method="POST"
-    action="{{ url_for('update_user_profile', user_id=user.id) }}"
-  >
-    {{ form.hidden_tag() }}
-    <div class="form-group m-2">
-      {{ form.name.label(class="form-control-label") }} {{
-      form.name(class="form-control") }}
-    </div>
-    <div class="form-group m-2">
-      {{ form.email.label(class="form-control-label") }} {{
-      form.email(class="form-control") }}
-    </div>
-    <div class="form-group m-2">
-      {{ form.profile_pic.label(class="form-control-label") }} {{
-      form.profile_pic(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary m-2">Update</button>
-  </form>
+<div class="box">
+  <div class="box2">
+    <h1>Update Profile</h1>
+    <form
+      method="POST"
+      action="{{ url_for('update_user_profile', user_id=user.id) }}"
+      class="input-field"
+    >
+      {{ form.hidden_tag() }}
+      <!-- divide -->
+      {% for field in form if field.widget.input_type !='hidden' %}
+      <!-- divide -->
+      {{ field.label }} {{ field }}
+      <!-- divide -->
+
+      {% endfor %}
+      <button type="submit">Update</button>
+    </form>
+    <a href="{{ url_for('user_profile', user_id=user.id)}}"
+      ><button id="cancel">Cancel</button></a
+    >
+  </div>
 </div>
 {% endblock %}

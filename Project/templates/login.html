@@ -1,19 +1,20 @@
 {% extends 'base.html' %} {% block title %}Login{% endblock %} {% block content
 %}
 
+<div class="box">
+  <div class="form-container">
+  <form action="/login" method="post">
+    <h1>Login</h1>
+    {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
+    'hidden' %}
 
-<div class="container-lg text-center">
-<form action="/login" method="post">
-    <h1 class="p-5">Login</h1>
-  {{form.hidden_tag()}} {% for field in form if field.widget.input_type !=
-  'hidden' %}
-
-  <p>
-    {{field.label}} <div class="form-outline">{{field}}</div>
+    <p>
+    {{field.label}} <div>{{field}}</div>
     {% for err in field.errors %} {{err}} {% endfor %}
-  </p>
-  {% endfor %}
-  <button type="submit" class="btn btn-primary">Login</button>
-</form>
+    </p>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+  </div>
 </div>
 {% endblock %}

@@ -225,7 +225,7 @@ def add_car(user_id):
         else:
             flash('Car info could not be retrieved.', 'danger')
     else:
-        flash('Car already exists.', 'info')
+        flash('Car already exists.', 'danger')
 
     return redirect(url_for('user_profile', user_id=user_id))
 

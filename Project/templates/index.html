@@ -1,18 +1,12 @@
 {% extends 'base.html' %}{% block title %}Car Lookup {% endblock %} {% block
 content %}
-<div class="container-fluid p-5">
-  <h1>Enter VIN to Get Car Information</h1>
-  <form action="{{ url_for('get_car_info') }}" method="post" class="d-flex">
-    <input
-      type="text"
-      id="vin"
-      name="vin"
-      required
-      class="form-control me-3"
-      placeholder="Enter VIN"
-    />
-    <button type="submit" class="btn btn-primary w-25 p-2">Get Info</button>
-  </form>
+<div class="box">
+  <div class="container m-1">
+    <h1>Enter VIN to Get Car Information</h1>
+    <form action="{{ url_for('get_car_info') }}" method="post">
+      <input type="text" id="vin" name="vin" required placeholder="Enter VIN" />
+      <button type="submit">Get Info</button>
+    </form>
+  </div>
 </div>
-
 {% endblock %}

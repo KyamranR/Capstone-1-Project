@@ -1,48 +1,52 @@
 {% extends 'base.html' %} {% block title %}Update Car Info{% endblock %} {%
 block content %}
-<div class="container m-1">
-  <h1>Update Car Information</h1>
-  <form method="POST" action="{{ url_for('update_car_info', vin=vin) }}">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.year.label }} {{ form.year(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.make.label }} {{ form.make(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.model.label }} {{ form.model(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.trim.label }} {{ form.trim(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.top_speed.label }} {{ form.top_speed(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.cylinders.label }} {{ form.cylinders(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.horsepower.label }} {{ form.horsepower(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.turbo.label }} {{ form.turbo(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.engine_model.label }} {{ form.engine_model(class_='form-control')
-      }}
-    </div>
-    <div class="form-group">
-      {{ form.transmission_style.label }} {{
-      form.transmission_style(class_='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form.drive_type.label }} {{ form.drive_type(class_='form-control') }}
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Update Info</button>
-  </form>
-  <a href="{{ url_for('show_car_info', vin=vin) }}">
-    <button class="btn btn-secondary mt-3">Cancel</button>
-  </a>
+<div class="box">
+  <div class="box2">
+    <h1>Update Car Information</h1>
+    <form
+      method="POST"
+      action="{{ url_for('update_car_info', vin=vin) }}"
+      class="input-field"
+    >
+      {{ form.hidden_tag() }}
+      <!-- <div class="form-group"> -->
+      {{ form.year.label }} {{ form.year }}
+      <!-- </div> -->
+      <!-- <div class="form-group"> -->
+      {{ form.make.label }} {{ form.make }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.model.label }} {{ form.model }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.trim.label }} {{ form.trim }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.top_speed.label }} {{ form.top_speed }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.cylinders.label }} {{ form.cylinders }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.horsepower.label }} {{ form.horsepower }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.turbo.label }} {{ form.turbo }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.engine_model.label }} {{ form.engine_model }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.transmission_style.label }} {{ form.transmission_style }}
+      <!-- </div>
+    <div class="form-group"> -->
+      {{ form.drive_type.label }} {{ form.drive_type }}
+      <!-- </div> -->
+      <button type="submit" class="btn btn-primary mt-3">Update Info</button>
+    </form>
+    <a href="{{ url_for('show_car_info', vin=vin) }}">
+      <button id="cancel">Cancel</button>
+    </a>
+  </div>
 </div>
 {% endblock %}

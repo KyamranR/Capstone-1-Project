@@ -1,41 +1,43 @@
 {% extends 'base.html' %} {% block title %}Car Info{% endblock %} {% block
 content %}
-<div class="container m-1">
-  <h1>Car Information</h1>
-  <h2>VIN: {{vin}}</h2>
-  {% if car_info %}
-  <p><strong>Year:</strong> {{ car_info.year }}</p>
-  <p><strong>Make:</strong> {{ car_info.make }}</p>
-  <p><strong>Model:</strong> {{ car_info.model }}</p>
-  <p><strong>Trim:</strong> {{ car_info.trim }}</p>
-  <p><strong>Top Speed:</strong> {{ car_info.top_speed }}</p>
-  <p><strong>Cylinders:</strong> {{ car_info.cylinders }}</p>
-  <p><strong>Horsepower:</strong> {{ car_info.horsepower }}</p>
-  <p><strong>Turbo:</strong> {{ car_info.turbo }}</p>
-  <p><strong>Engine Model:</strong> {{ car_info.engine_model }}</p>
-  <p><strong>Fuel Type:</strong> {{ car_info.fuel_type }}</p>
-  <p><strong>Transmission Style:</strong> {{ car_info.transmission_style }}</p>
-  <p><strong>Drive Type:</strong> {{ car_info.drive_type }}</p>
-  {% else %}
-  <p>No information found for this VIN.</p>
-  {% endif %} {% if session.get('user_id') %}
-  <form
-    action="{{ url_for('add_car', user_id=session['user_id']) }}"
-    method="post"
-  >
-    <input type="hidden" name="vin" value="{{ vin }}" />
-    <button type="submit" class="btn btn-primary">Add Car</button>
-  </form>
-  <!-- <a href="{{ url_for('update_car_info', vin=vin) }}">
-    <button class="btn btn-outline-warning mt-3">Update Info</button><br />
-  </a> -->
-  {% else %}
-  <p>
-    <a href="{{ url_for('login') }}">Log in</a> to add this car to your profile.
-  </p>
-  {% endif %}
-  <a href="{{ url_for('index') }}"
-    ><button class="btn btn-secondary mt-2">Back</button></a
-  >
+<div class="box">
+  <div class="box3">
+    <!-- <div> -->
+    <h1>Car Information</h1>
+    <h2>VIN: {{vin}}</h2>
+    {% if car_info %}
+    <p><strong>Year:</strong> {{ car_info.year }}</p>
+    <p><strong>Make:</strong> {{ car_info.make }}</p>
+    <p><strong>Model:</strong> {{ car_info.model }}</p>
+    <p><strong>Trim:</strong> {{ car_info.trim }}</p>
+    <p><strong>Top Speed:</strong> {{ car_info.top_speed }}</p>
+    <p><strong>Cylinders:</strong> {{ car_info.cylinders }}</p>
+    <p><strong>Horsepower:</strong> {{ car_info.horsepower }}</p>
+    <p><strong>Turbo:</strong> {{ car_info.turbo }}</p>
+    <p><strong>Engine Model:</strong> {{ car_info.engine_model }}</p>
+    <p><strong>Fuel Type:</strong> {{ car_info.fuel_type }}</p>
+    <p>
+      <strong>Transmission Style:</strong> {{ car_info.transmission_style }}
+    </p>
+    <p><strong>Drive Type:</strong> {{ car_info.drive_type }}</p>
+    {% else %}
+    <p>No information found for this VIN.</p>
+    {% endif %} {% if session.get('user_id') %}
+    <form
+      action="{{ url_for('add_car', user_id=session['user_id']) }}"
+      method="post"
+    >
+      <input type="hidden" name="vin" value="{{ vin }}" />
+      <button type="submit">Add Car</button>
+    </form>
+    {% else %}
+    <p>
+      <a href="{{ url_for('login') }}">Log in</a> to add this car to your
+      profile.
+    </p>
+    {% endif %}
+    <a href="{{ url_for('index') }}"><button>Back</button></a>
+    <!-- </div> -->
+  </div>
 </div>
 {% endblock %}
