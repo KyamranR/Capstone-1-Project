@@ -107,10 +107,17 @@ def update_user_profile(user_id):
     if form.validate_on_submit():
         user.name = form.name.data
         user.email = form.email.data
-        user.profile_pic = form.profile_pic.data
-        
-        db.session.commit()
-        flash('User info was updated successfully!', 'success')
+        if form.profile_pic.data:
+            user.profile_pic = form.profile_pic.data
+        else:
+            user.profile_pic = User.profile_pic.default.arg
+        try:    
+            db.session.commit()
+            flash('User info was updated successfully!', 'success')
+        except:
+            db.session.rollback()
+            flash('Error updating user info. Please try again.', 'danger')
+            
         return redirect(url_for('user_profile', user_id=user.id))
     
     return render_template('update_user_profile.html', form=form, user=user)
