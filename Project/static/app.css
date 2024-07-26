@@ -2,9 +2,8 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #cacaca;
-  width: 100%;
-  height: 100%;
+  background: #333;
+  overflow: hidden;
 }
 
 .profile-pic {
@@ -20,7 +19,7 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: static;
+  position: fixed;
   width: 100%;
   top: 0;
   z-index: 1000;
@@ -35,7 +34,7 @@ body {
 .navbar-brand {
   font-size: 32px;
   font-weight: bold;
-  color: #000000;
+  color: #c8c8c8;
   text-decoration: none;
   margin-left: 10px;
   transition: color 0.3s ease;
@@ -51,7 +50,7 @@ body {
 }
 
 .nav-link {
-  color: #000;
+  color: #dbdbdb;
   text-decoration: none;
   font-size: 18px;
   transition: color 0.3s ease;
@@ -76,12 +75,14 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.81);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  padding-bottom: 30px;
   max-width: 500px;
   width: 90%;
   margin-top: 80px;
@@ -93,6 +94,7 @@ h1 {
   align-items: center;
   flex-direction: column;
   margin-bottom: 30px;
+  color: whitesmoke;
 }
 
 .box2 {
@@ -101,15 +103,16 @@ h1 {
   align-items: center;
   flex-direction: column;
   gap: 5px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.21);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.81);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 10px;
   max-width: 100%;
   width: 90%;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .box3 {
@@ -117,15 +120,34 @@ h1 {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.81);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 10px;
   max-width: 100%;
   width: 90%;
+  margin-top: 50px;
 }
+
+.vin {
+  display: inline;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.81);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  max-width: 100%;
+  margin-top: 100px;
+  width: 90%;
+}
+
 .input-field {
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 input[type="text"],
@@ -136,7 +158,7 @@ input[type="number"] {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 95%;
+  width: 95.5%;
 }
 
 select {
@@ -144,7 +166,11 @@ select {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 99%;
+  width: 30%;
+}
+
+.sign-in {
+  color: #b8b8b8d5;
 }
 
 .text-center {
@@ -152,12 +178,11 @@ select {
 }
 
 label {
-  color: rgb(0, 0, 0);
+  color: rgb(220, 220, 220);
   font-weight: bold;
   padding: 5px;
 }
 
-button[type="submit"],
 button {
   padding: 10px;
   margin-top: 5px;
@@ -169,6 +194,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+#btn-long {
+  width: 100%;
 }
 
 button[type="submit"]:hover,
@@ -228,4 +257,61 @@ li {
   justify-content: space-between;
   align-items: center;
   margin-top: 5px;
+}
+
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 60px);
+  z-index: 1;
+  overflow-y: auto;
+  margin-top: 80px;
+}
+
+.hexagon-container {
+  position: absolute;
+  display: grid;
+  top: 0;
+  left: 0;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.hexagon {
+  width: 100px; /* Adjust as needed */
+  height: 100px; /* 100px * sqrt(3)/2 */
+  background-color: #222;
+  margin: 5px; /* 100px * sqrt(3)/4 */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  transform: rotate(30deg);
+}
+
+.hexagon::before,
+.hexagon::after {
+  content: "";
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  background-color: inherit;
+}
+
+.hexagon::before {
+  transform: translateY(-86.6px); /* 100px * sqrt(3)/2 */
+}
+
+.hexagon::after {
+  transform: translateY(86.6px); /* 100px * sqrt(3)/2 */
+}
+
+.hexagon:nth-child(odd) {
+  transform: translateY(-55px) rotate(30deg);
 }

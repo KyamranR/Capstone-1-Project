@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% block title %}Car Lookup {% endblock %} {% block
 content %}
 <div class="box">
-  <div class="container m-1">
+  <div class="vin">
     <h1>Enter VIN to Get Car Information</h1>
     <form action="{{ url_for('get_car_info') }}" method="post">
       <input type="text" id="vin" name="vin" required placeholder="Enter VIN" />

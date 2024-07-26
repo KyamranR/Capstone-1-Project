@@ -23,13 +23,7 @@ content %}
     {% else %}
     <p>No information found for this VIN.</p>
     {% endif %} {% if session.get('user_id') %}
-    <form
-      action="{{ url_for('add_car', user_id=session['user_id']) }}"
-      method="post"
-    >
-      <input type="hidden" name="vin" value="{{ vin }}" />
-      <button type="submit" class="btn btn-primary">Add Car</button>
-    </form>
+
     <a href="{{ url_for('update_car_info', vin=vin) }}">
       <button class="btn btn-outline-warning mt-3">Update Info</button><br />
     </a>
