@@ -7,7 +7,7 @@ from form import LoginForm, RegistrationForm, EditUserProfileForm, EditCarInfoFo
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///car_lookup'))
+    os.environ.get('DATABASE_URL', 'postgresql:///postgres.zszlivydsemwmwwswasy:[7g!jYy3Wm$P97Yk]@aws-0-us-east-1.pooler.supabase.com:6543/postgres'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
