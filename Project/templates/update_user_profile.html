@@ -1,12 +1,11 @@
 {% extends "base.html" %} {% block title %}Update Profile{% endblock %} {% block
 content %}
 <div class="box">
-  <div class="box2">
+  <div class="update">
     <h1>Update Profile</h1>
     <form
       method="POST"
       action="{{ url_for('update_user_profile', user_id=user.id) }}"
-      class="input-field"
     >
       {{ form.hidden_tag() }}
       <!-- divide -->
@@ -16,7 +15,7 @@ content %}
       <!-- divide -->
 
       {% endfor %}
-      <button type="submit">Update</button>
+      <button type="submit" id="btn-long">Update</button>
     </form>
     <a href="{{ url_for('user_profile', user_id=user.id)}}"
       ><button id="cancel">Cancel</button></a

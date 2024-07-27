@@ -84,8 +84,26 @@ h1 {
   padding: 20px;
   padding-bottom: 30px;
   max-width: 500px;
-  width: 90%;
+  width: 100%;
   margin-top: 80px;
+}
+
+.update {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.21);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.81);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  padding-bottom: 30px;
+  max-width: 500px;
+  width: 100%;
 }
 
 .box {
@@ -111,7 +129,7 @@ h1 {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 10px;
   max-width: 100%;
-  width: 90%;
+  width: 50%;
   margin-top: 30px;
 }
 
@@ -124,7 +142,7 @@ h1 {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   padding: 10px;
   max-width: 100%;
-  width: 90%;
+  width: 50%;
   margin-top: 50px;
 }
 
@@ -186,7 +204,6 @@ label {
 button {
   padding: 10px;
   margin-top: 5px;
-  margin-right: 10px;
   font-size: 16px;
   background-color: #007bff;
   color: #fff;
