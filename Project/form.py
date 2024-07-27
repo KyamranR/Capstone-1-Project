@@ -6,18 +6,18 @@ from wtforms.validators import DataRequired, Length, Email, Optional
 class LoginForm(FlaskForm):
     """User login form"""
 
-    email = StringField('Email:', validators=[DataRequired()])
-    password = PasswordField('Password:', validators=[DataRequired()])
+    email = StringField('Email:', validators=[DataRequired()], render_kw={'placeholder': 'Enter email'})
+    password = PasswordField('Password:', validators=[DataRequired()], render_kw={'placeholder': 'Enter password'})
 
 
 
 class RegistrationForm(FlaskForm):
     """User registration form"""
 
-    name = StringField('Name:', validators=[DataRequired(), Length(min=1, max=20)])
-    email = StringField('Email:', validators=[DataRequired(), Length(max=50)])
-    profile_pic = StringField('Profile Photo')
-    password = PasswordField('Password:', validators=[DataRequired(), Length(min=6, max=50)])
+    name = StringField('Name:', validators=[DataRequired(), Length(min=1, max=20)], render_kw={'placeholder': 'Enter your full name'})
+    email = StringField('Email:', validators=[DataRequired(), Length(max=50)], render_kw={'placeholder': 'Enter your email (required)'})
+    profile_pic = StringField('Profile Photo', render_kw={'placeholder': '(Optional)'})
+    password = PasswordField('Password:', validators=[DataRequired(), Length(min=6, max=50)], render_kw={'placeholder': 'Password'})
 
 
 class EditUserProfileForm(FlaskForm):
