@@ -196,7 +196,7 @@ def update_car_info(vin):
         car_info.top_speed = form.top_speed.data or car_info.top_speed
         car_info.cylinders = form.cylinders.data or car_info.cylinders
         car_info.horsepower = form.horsepower.data or car_info.horsepower
-        car_info.turbo = form.turbo.data
+        car_info.turbo = form.turbo.data or car_info.turbo
         car_info.engine_model = form.engine_model.data or car_info.engine_model
         car_info.transmission_style = form.transmission_style.data or car_info.transmission_style
         car_info.drive_type = form.drive_type.data or car_info.drive_type
