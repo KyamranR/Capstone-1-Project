@@ -332,3 +332,101 @@ li {
 .hexagon:nth-child(odd) {
   transform: translateY(-55px) rotate(30deg);
 }
+
+@media screen and (max-width: 501px) {
+  .hexagon-container {
+    position: absolute;
+    display: grid;
+    top: 0;
+    left: 0;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 5px;
+    width: 107%;
+    height: 100%;
+    z-index: -1;
+  }
+  .navbar-brand {
+    font-size: 18px;
+    font-weight: bold;
+    color: #c8c8c8;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+  }
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.21);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.81);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    padding-bottom: 30px;
+    max-width: 500px;
+    width: 80%;
+    margin-top: 80px;
+  }
+  .box2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    background-color: rgba(255, 255, 255, 0.21);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.81);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    max-width: 100%;
+    width: 90%;
+    margin-top: 10px;
+  }
+  .update {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.21);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.81);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    padding-bottom: 30px;
+    max-width: 500px;
+    width: 80%;
+  }
+  .box3 {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.81);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    max-width: 100%;
+    width: 90%;
+    margin-top: 5px;
+  }
+}
+
+@media screen and (max-width: 387px) {
+  .hexagon-container {
+    position: absolute;
+    display: grid;
+    top: 0;
+    left: 0;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 5px;
+    width: 115%;
+    height: 100%;
+    z-index: -1;
+  }
+}
