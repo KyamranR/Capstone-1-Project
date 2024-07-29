@@ -7,7 +7,7 @@ from form import LoginForm, RegistrationForm, EditUserProfileForm, EditCarInfoFo
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql://car_lookup'))
+    os.environ.get('DATABASE_URL', 'postgresql:///car_lookup'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
@@ -188,6 +188,15 @@ def update_car_info(vin):
         return redirect(url_for('user_profile', user_id=user_id))
 
     form = EditCarInfoForm(obj=car_info)
+    
+    if request.method == 'GET':
+        if car_info.turbo is None:
+            form.turbo.data = 'False'
+        elif car_info.turbo == 'True':
+            form.turbo.data = 'True'
+        else:
+            form.turbo.data = 'False'
+
     if form.validate_on_submit():
         car_info.year = form.year.data or car_info.year
         car_info.make = form.make.data or car_info.make
@@ -196,7 +205,14 @@ def update_car_info(vin):
         car_info.top_speed = form.top_speed.data or car_info.top_speed
         car_info.cylinders = form.cylinders.data or car_info.cylinders
         car_info.horsepower = form.horsepower.data or car_info.horsepower
-        car_info.turbo = True if form.turbo.data == 'True' else False
+        
+        if form.turbo.data == 'True':
+            car_info.turbo = 'True'
+        elif form.turbo.data == 'False':
+            car_info.turbo = 'False'
+        else:
+            car_info.turbo = None
+
         car_info.engine_model = form.engine_model.data or car_info.engine_model
         car_info.transmission_style = form.transmission_style.data or car_info.transmission_style
         car_info.drive_type = form.drive_type.data or car_info.drive_type
