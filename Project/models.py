@@ -83,7 +83,7 @@ def fetch_car_data(vin):
             car_info_data['top_speed'] = int(item['Value']) if item['Value'] else None
         elif item['Variable'] == 'Engine Number of Cylinders':
             car_info_data['cylinders'] = item['Value']
-        elif item['Variable'] == 'Engine HP':
+        elif item['Variable'] == 'Engine Brake (hp) From':
             car_info_data['horsepower'] = item['Value']
         elif item['Variable'] == 'Turbo':
             car_info_data['turbo'] = item['Value']
