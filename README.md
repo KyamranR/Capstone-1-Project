@@ -28,5 +28,5 @@ _Please Note: You don't get all the information about the car, it is a free API 
 
 ## Technology Stack
 
--Frontend: HTML, CSS, Jinja
--Backend: Python, Flask, SQLAlchemy, PostreSQL, WTForms
+- Frontend: HTML, CSS, Jinja
+- Backend: Python, Flask, SQLAlchemy, PostreSQL, WTForms
