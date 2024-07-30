@@ -57,6 +57,17 @@ body {
   margin-right: 20px;
 }
 
+.link {
+  color: #000000;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #6aaff9;
+}
+
 .nav-link:hover {
   color: #007bff;
 }
@@ -331,6 +342,20 @@ li {
 
 .hexagon:nth-child(odd) {
   transform: translateY(-55px) rotate(30deg);
+}
+
+@media screen and (max-width: 768px) {
+  .hexagon-container {
+    position: absolute;
+    display: grid;
+    top: 0;
+    left: 0;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 5px;
+    width: 116%;
+    height: 100%;
+    z-index: -1;
+  }
 }
 
 @media screen and (max-width: 501px) {

@@ -11,7 +11,21 @@ content %}
       <!-- divide -->
       {% for field in form if field.widget.input_type !='hidden' %}
       <!-- divide -->
-      {{ field.label }} {{ field }}
+
+      {{ field.label }}
+      <!-- divide -->
+      {% if field.name == 'profile_pic' %}
+      <input
+        type="text"
+        name="{{ field.name }}"
+        id="{{ field.id }}"
+        value="{% if field.data != '/static/lambo.png' %}{{ field.data }}{% endif %}"
+      />
+      {% else %}
+      <!-- divide -->
+      {{ field }}
+      <!-- divide -->
+      {% endif %}
       <!-- divide -->
 
       {% endfor %}

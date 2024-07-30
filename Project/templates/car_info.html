@@ -32,8 +32,8 @@ content %}
     </form>
     {% else %}
     <p>
-      <a href="{{ url_for('login') }}">Log in</a> to add this car to your
-      profile.
+      <a href="{{ url_for('login') }}" class="link">Log in</a> to add this car
+      to your profile.
     </p>
     {% endif %}
     <a href="{{ url_for('index') }}"><button>Back</button></a>
