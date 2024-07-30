@@ -12,14 +12,14 @@ Link to the website [Car-lookup](https://car-lookup.onrender.com)
 
 ## Walkthrough of the website
 
-- [Main Page]()
-- [Searching car info]()
-- [Getting car info]()
-- [Login Page]()
-- [Register Page]()
-- [User profile]()
-- [Update user profile]()
-- [Update car info]()
+- [Main Page](/Userflow_pics/main.png)
+- [Searching car info](/Userflow_pics/search.png)
+- [Getting car info](/Userflow_pics/car-info.png)
+- [Login Page](/Userflow_pics/login.png)
+- [Register Page](/Userflow_pics/registration.png)
+- [User profile](/Userflow_pics/user-profile.png)
+- [Update user profile](/Userflow_pics/user-update.png)
+- [Update car info](/Userflow_pics/update-car-info.png)
 
 ## API
 
