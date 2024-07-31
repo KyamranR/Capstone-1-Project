@@ -1,3 +1,7 @@
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -360,10 +364,15 @@ li {
 }
 
 @media screen and (max-width: 501px) {
-  html,
-  body {
+  .main {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px);
     height: -webkit-fill-available;
+    z-index: 1;
+    overflow-y: auto;
   }
+
   .hexagon-container {
     position: absolute;
     display: grid;
