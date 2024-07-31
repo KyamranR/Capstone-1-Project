@@ -359,6 +359,10 @@ li {
 }
 
 @media screen and (max-width: 501px) {
+  html,
+  body {
+    height: -webkit-fill-available;
+  }
   .hexagon-container {
     position: absolute;
     display: grid;
