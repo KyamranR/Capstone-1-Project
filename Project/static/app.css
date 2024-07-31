@@ -4,6 +4,7 @@ body {
   padding: 0;
   background: #333;
   overflow: hidden;
+  height: -webkit-fill-available;
 }
 
 .profile-pic {
@@ -396,7 +397,7 @@ li {
     padding-bottom: 30px;
     max-width: 500px;
     width: 80%;
-    margin-top: 80px;
+    margin-top: 2px;
   }
   .box2 {
     display: flex;
